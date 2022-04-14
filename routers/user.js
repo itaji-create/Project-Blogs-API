@@ -2,10 +2,10 @@ const express = require('express');
 
 const router = express.Router();
 
-const { validLogin, validEmail } = require('../middleware/user');
+const { validName, validPassword, validEmail } = require('../middleware/user');
 const userController = require('../controllers/user');
 
 router
-  .post('/', validLogin, validEmail, userController);
+  .post('/', validName, validPassword, validEmail, userController);
 
 module.exports = router;
