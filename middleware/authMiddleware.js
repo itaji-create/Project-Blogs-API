@@ -6,12 +6,12 @@ const authMiddleware = (req, res, next) => {
   const { authorization: token } = req.headers;
 
   try {
-    const decoded = jwt.verify(token, secret);
-    req.user = decoded;
+    if (!token) return res.status(401).json({ message: 'Token not found' });
+    jwt.verify(token, secret);
 
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Not Authorized!!!' });
+    return res.status(401).json({ message: 'Expired or invalid token' });
   }
 };
 

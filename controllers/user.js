@@ -1,4 +1,5 @@
 const userServices = require('../services/user');
+const { User } = require('../models');
 
 const user = async (req, res) => {
   const { displayName, email, password, image } = req.body;
@@ -10,4 +11,14 @@ const user = async (req, res) => {
   return res.status(201).json(newUser);
 };
 
-module.exports = user;
+const getAll = async (req, res) => {
+  const users = await User.findAll({
+    attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+  });
+  return res.status(200).json(users);
+};
+
+module.exports = {
+  user,
+  getAll,
+};
