@@ -8,6 +8,6 @@ const { validTitle, validContent, validCategoryId } = require('../middleware/pos
 
 router
  .post('/', validTitle, validContent, validCategoryId, authMiddleware, postController.create)
- .get('/', postController.getAll);
+ .get('/', authMiddleware, postController.getAll);
 
 module.exports = router;
