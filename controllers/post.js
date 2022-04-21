@@ -27,14 +27,29 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   try {
     const { id } = req.params;
-    const post = await BlogPost.findByPk(id, {
-      include: [
-        { model: User, as: 'user' },
-        { model: Category, as: 'categories', through: { attributes: [] } },
-      ],
-    });
-    if (!post) return res.status(404).json({ message: 'Post does not exist' });
-    return res.status(200).json(post);
+    const result = await postServices.getById(id); 
+    return res.status(result.status).json(result.content);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
+const updatePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, content, categoryIds } = req.body;
+    if (categoryIds) return res.status(400).json({ message: 'Categories cannot be edited' });
+    const result = await postServices.getById(id);
+    if (result.content.userId !== req.user.dataValues.id) {
+      return res.status(401).json({ message: 'Unauthorized user' })
+    }
+    if (result.status === 200) {
+      result.content.title = title;
+      result.content.content = content;
+      // await post.save();
+    }
+
+    return res.status(result.status).json(result.content);
   } catch (error) {
     return res.status(500).json(error.message);
   }
@@ -44,4 +59,5 @@ module.exports = {
   create,
   getAll,
   getById,
+  updatePost,
 };

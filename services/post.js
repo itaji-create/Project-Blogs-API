@@ -1,5 +1,4 @@
-const { BlogPost } = require('../models');
-const { Category } = require('../models');
+const { BlogPost, Category, User } = require('../models');
 
 const create = async (body) => {
   const { title, content, categoryIds } = body;
@@ -13,7 +12,19 @@ const getAll = async () => {
   return categories;
 };
 
+const getById = async (id) => {
+  const post = await BlogPost.findByPk(id, {
+    include: [
+      { model: User, as: 'user' },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+  if (!post) return { status: 404, content: { message: 'Post does not exist' } };
+  return { status: 200, content: post };
+};
+
 module.exports = {
   create,
   getAll,
+  getById,
 };

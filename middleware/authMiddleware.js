@@ -11,7 +11,7 @@ const authMiddleware = async (req, res, next) => {
   
     const decoded = jwt.verify(token, secret);    
     const user = decoded.data;
-    const exist = await loginService.authUser(user.email, user.password);
+    const exist = await loginService.authUser(user.email);
     if (!exist) return res.status(400).json({ message: 'User not found' });
     req.user = exist;
       
