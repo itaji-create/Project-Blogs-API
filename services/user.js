@@ -10,7 +10,12 @@ const create = async ({ displayName, email, password, image }) => {
   return user;
 };
 
+const deleteUser = async (id) => {
+  await User.destroy({ where: { id } });
+};
+
 module.exports = {
   create,
   validUser,
+  deleteUser,
 };

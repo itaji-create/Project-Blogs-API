@@ -9,6 +9,7 @@ const userController = require('../controllers/user');
 router
   .post('/', validName, validPassword, validEmail, userController.create)
   .get('/', authMiddleware, userController.getAll)
-  .get('/:id', authMiddleware, userController.getById);
+  .get('/:id', authMiddleware, userController.getById)
+  .delete('/me', authMiddleware, userController.deleteUser);
 
 module.exports = router;
