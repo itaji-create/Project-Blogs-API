@@ -23,8 +23,13 @@ const getById = async (id) => {
   return { status: 200, content: post };
 };
 
+const deletePost = async (id) => {
+  await BlogPost.destroy({ where: { id } });
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  deletePost,
 };

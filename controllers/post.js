@@ -40,9 +40,7 @@ const updatePost = async (req, res) => {
     const { title, content, categoryIds } = req.body;
     if (categoryIds) return res.status(400).json({ message: 'Categories cannot be edited' });
     const result = await postServices.getById(id);
-    if (result.content.userId !== req.user.dataValues.id) {
-      return res.status(401).json({ message: 'Unauthorized user' })
-    }
+
     if (result.status === 200) {
       result.content.title = title;
       result.content.content = content;
@@ -55,9 +53,23 @@ const updatePost = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await postServices.getById(id);
+    if (!result) return res.status(result.status).json(result.content);
+    await postServices.deletePost(Number(id));
+
+    return res.status(204).json({ message: 'Post excluído com sucesso!' });
+    } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   updatePost,
+  deletePost,
 };
