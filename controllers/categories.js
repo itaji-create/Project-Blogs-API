@@ -1,4 +1,3 @@
-const postServices = require('../services/post');
 const { Category } = require('../models');
 
 const create = async (req, res) => {
@@ -14,7 +13,7 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const categories = await postServices.getAll();
+    const categories = await Category.findAll();
     return res.status(200).json(categories);
   } catch (error) {
     return res.status(500).json(error.message);

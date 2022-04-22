@@ -42,7 +42,7 @@ const getById = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     await userServices.deleteUser(req.user.dataValues.id);
-    return res.status(204).json({ message: '' });
+    return res.status(204).json({ message: 'Usuário excluido' });
   } catch (error) {
     return res.status(500).json(error.message);
   }

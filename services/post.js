@@ -8,8 +8,13 @@ const create = async (body) => {
 };
 
 const getAll = async () => {
-  const categories = await Category.findAll();
-  return categories;
+  const posts = await BlogPost.findAll({
+    include: [
+      { model: User, as: 'user' },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+  return posts;
 };
 
 const getById = async (id) => {

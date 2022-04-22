@@ -9,6 +9,7 @@ const { validTitle, validContent, validCategoryId } = require('../middleware/pos
 router
  .post('/', validTitle, validContent, validCategoryId, authMiddleware, postController.create)
  .get('/', authMiddleware, postController.getAll)
+ .get('/search', authMiddleware, postController.search)
  .get('/:id', authMiddleware, postController.getById)
  .put('/:id', validTitle, validContent, authMiddleware, authUser, postController.updatePost)
  .delete('/:id', authMiddleware, authUser, postController.deletePost);

@@ -1,5 +1,4 @@
 const postServices = require('../services/post');
-const { BlogPost, User, Category } = require('../models');
 
 const create = async (req, res) => {
   try {
@@ -12,12 +11,8 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const posts = await BlogPost.findAll({
-      include: [
-        { model: User, as: 'user' },
-        { model: Category, as: 'categories', through: { attributes: [] } },
-      ],
-    });
+    const posts = await postServices.getAll();
+
     return res.status(200).json(posts);    
   } catch (error) {
     return res.status(500).json(error.message);
@@ -66,10 +61,26 @@ const deletePost = async (req, res) => {
   }
 };
 
+const search = async (req, res) => {
+  try {
+    const { q } = req.query;
+    const posts = await postServices.getAll();
+    const filteredPost = posts.filter((e) => e.content.includes(q));
+    if (filteredPost.length === 0 || filteredPost.length === posts.length) {
+      const postsByTitle = posts.filter((e) => e.title.includes(q));
+      return res.status(200).json(postsByTitle);
+    }
+    return res.status(200).json(filteredPost);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   create,
   getAll,
   getById,
   updatePost,
   deletePost,
+  search,
 };
