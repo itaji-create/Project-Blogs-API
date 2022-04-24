@@ -65,12 +65,12 @@ const search = async (req, res) => {
   try {
     const { q } = req.query;
     const posts = await postServices.getAll();
-    const filteredPost = posts.filter((e) => e.content.includes(q));
-    if (filteredPost.length === 0 || filteredPost.length === posts.length) {
+    const postsByContent = posts.filter((e) => e.content.includes(q));
+    if (postsByContent.length === 0 || postsByContent.length === posts.length) {
       const postsByTitle = posts.filter((e) => e.title.includes(q));
       return res.status(200).json(postsByTitle);
     }
-    return res.status(200).json(filteredPost);
+    return res.status(200).json(postsByContent);
   } catch (error) {
     return res.status(500).json(error.message);
   }
